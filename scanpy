@@ -1,0 +1,144 @@
+module load Python/3.10.4-GCCcore-11.3.0-bare
+source /well/combat/users/nif917/python/projectA-skylake/bin/activate
+cd /well/combat/users/nif917/ref
+
+import scanpy as sc
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as pylab
+adata = sc.read_h5ad('/well/combat/users/nif917/ref/COMBAT-CITESeq-DATA.h5ad')
+
+########## T cells
+
+CD4 = adata[adata.obs.Annotation_major_subset == 'CD4']
+CD8 = adata[adata.obs.Annotation_major_subset == 'CD8']
+
+CD8_covid = CD8[CD8.obs.Source.str.startswith('COVID'),:]
+CD8_covid_naive = CD8_covid[CD8_covid.obs.Annotation_minor_subset.str.startswith('CD8.NAIVE'),:]
+sc.pp.calculate_qc_metrics(CD8_covid_naive, percent_top=None, log1p=False, inplace=True)
+CD8_covid_naive = CD8_covid_naive[CD8_covid_naive.obs.n_genes_by_counts >100, :]
+CD8_covid_naive = CD8_covid_naive[:,CD8_covid_naive.var.n_cells_by_counts >500]
+cd8_covid_naive = pd.DataFrame(data=CD8_covid_naive.X.toarray(),index=CD8_covid_naive.obs.index, columns=CD8_covid_naive.var.gene_ids)
+cd8_covid_naive.to_csv("cd8_covid_naive.csv")
+CD8_covid_naive.write_csvs("CD8_covid_naive")
+
+CD8_covid_temra = CD8_covid[CD8_covid.obs.Annotation_minor_subset.str.startswith('CD8.TEMRA'),:]
+sc.pp.calculate_qc_metrics(CD8_covid_temra, percent_top=None, log1p=False, inplace=True)
+CD8_covid_temra = CD8_covid_temra[CD8_covid_temra.obs.n_genes_by_counts >100, :]
+CD8_covid_temra = CD8_covid_temra[:,CD8_covid_temra.var.n_cells_by_counts >500]
+cd8_covid_temra = pd.DataFrame(data=CD8_covid_temra.X.toarray(),index=CD8_covid_temra.obs.index, columns=CD8_covid_temra.var.gene_ids)
+cd8_covid_temra.to_csv("cd8_covid_temra.csv")
+CD8_covid_temra.write_csvs("CD8_covid_temra")
+
+CD8_covid = CD8[CD8.obs.Source.str.startswith('COVID'),:]
+CD8_covid_naive = CD8_covid[CD8_covid.obs.Annotation_minor_subset.str.startswith('CD8.TEM'),:]
+sc.pp.calculate_qc_metrics(CD8_covid_naive, percent_top=None, log1p=False, inplace=True)
+CD8_covid_naive = CD8_covid_naive[CD8_covid_naive.obs.n_genes_by_counts >100, :]
+CD8_covid_naive = CD8_covid_naive[:,CD8_covid_naive.var.n_cells_by_counts >500]
+cd8_covid_naive = pd.DataFrame(data=CD8_covid_naive.X.toarray(),index=CD8_covid_naive.obs.index, columns=CD8_covid_naive.var.gene_ids)
+cd8_covid_naive.to_csv("cd8_covid_tem.csv")
+CD8_covid_naive.write_csvs("CD8_covid_tem")
+
+CD8_hv = CD8[CD8.obs.Source.str.startswith('HV'),:]
+CD8_hv_temra = CD8_hv[CD8_hv.obs.Annotation_minor_subset.str.startswith('CD8.TEMRA'),:]
+sc.pp.calculate_qc_metrics(CD8_hv_temra, percent_top=None, log1p=False, inplace=True)
+CD8_hv_temra = CD8_hv_temra[CD8_hv_temra.obs.n_genes_by_counts >100, :]
+CD8_hv_temra = CD8_hv_temra[:,CD8_hv_temra.var.n_cells_by_counts >500]
+cd8_hv_temra = pd.DataFrame(data=CD8_hv_temra.X.toarray(),index=CD8_hv_temra.obs.index, columns=CD8_hv_temra.var.gene_ids)
+cd8_hv_temra.to_csv("cd8_hv_temra.csv")
+CD8_hv_temra.write_csvs("CD8_hv_temra")
+
+
+CD8_hv = CD8[CD8.obs.Source.str.startswith('HV'),:]
+CD8_hv_naive = CD8_hv[CD8_hv.obs.Annotation_minor_subset.str.startswith('CD8.NAIVE'),:]
+sc.pp.calculate_qc_metrics(CD8_hv_naive, percent_top=None, log1p=False, inplace=True)
+CD8_hv_naive = CD8_hv_naive[CD8_hv_naive.obs.n_genes_by_counts >100, :]
+CD8_hv_naive = CD8_hv_naive[:,CD8_hv_naive.var.n_cells_by_counts >500]
+cd8_hv_naive = pd.DataFrame(data=CD8_hv_naive.X.toarray(),index=CD8_hv_naive.obs.index, columns=CD8_hv_naive.var.gene_ids)
+cd8_hv_naive.to_csv("cd8_hv_naive.csv")
+CD8_hv_naive.write_csvs("CD8_hv_naive")
+
+CD8_flu = CD8[CD8.obs.Source.str.startswith('Flu'),:]
+CD8_flu_temra = CD8_flu[CD8_flu.obs.Annotation_minor_subset.str.startswith('CD8.TEMRA'),:]
+sc.pp.calculate_qc_metrics(CD8_flu_temra, percent_top=None, log1p=False, inplace=True)
+CD8_flu_temra = CD8_flu_temra[CD8_flu_temra.obs.n_genes_by_counts >100, :]
+CD8_flu_temra = CD8_flu_temra[:,CD8_flu_temra.var.n_cells_by_counts >500]
+cd8_flu_temra = pd.DataFrame(data=CD8_flu_temra.X.toarray(),index=CD8_flu_temra.obs.index, columns=CD8_flu_temra.var.gene_ids)
+cd8_flu_temra.to_csv("cd8_flu_temra.csv")
+CD8_flu_temra.write_csvs("CD8_flu_temra")
+
+CD8_sepsis = CD8[CD8.obs.Source.str.startswith('Sepsis'),:]
+CD8_sepsis_temra = CD8_sepsis[CD8_sepsis.obs.Annotation_minor_subset.str.startswith('CD8.TEMRA'),:]
+sc.pp.calculate_qc_metrics(CD8_sepsis_temra, percent_top=None, log1p=False, inplace=True)
+CD8_sepsis_temra = CD8_sepsis_temra[CD8_sepsis_temra.obs.n_genes_by_counts >100, :]
+CD8_sepsis_temra = CD8_sepsis_temra[:,CD8_sepsis_temra.var.n_cells_by_counts >500]
+cd8_sepsis_temra = pd.DataFrame(data=CD8_sepsis_temra.X.toarray(),index=CD8_sepsis_temra.obs.index, columns=CD8_sepsis_temra.var.gene_ids)
+cd8_sepsis_temra.to_csv("cd8_sepsis_temra.csv")
+CD8_sepsis_temra.write_csvs("CD8_sepsis_temra")
+
+CD4 = adata[adata.obs.Annotation_major_subset == 'CD4']
+CD4_covid = CD4[CD4.obs.Source.str.startswith('COVID'),:]
+CD4_covid_naive = CD4_covid[CD4_covid.obs.Annotation_minor_subset.str.startswith('CD4.NAIVE'),:]
+sc.pp.calculate_qc_metrics(CD4_covid_naive, percent_top=None, log1p=False, inplace=True)
+CD4_covid_naive = CD4_covid_naive[CD4_covid_naive.obs.n_genes_by_counts >100, :]
+CD4_covid_naive = CD4_covid_naive[:,CD4_covid_naive.var.n_cells_by_counts >500]
+cd4_covid_naive = pd.DataFrame(data=CD4_covid_naive.X.toarray(),index=CD4_covid_naive.obs.index, columns=CD4_covid_naive.var.gene_ids)
+cd4_covid_naive.to_csv("cd4_covid_temra.csv")
+CD4_covid_naive.write_csvs("CD4_covid_temra")
+
+
+CD4_covid_tcm = CD4_covid[CD4_covid.obs.Annotation_minor_subset.str.startswith('CD4.TCM'),:]
+sc.pp.calculate_qc_metrics(CD4_covid_tcm, percent_top=None, log1p=False, inplace=True)
+CD4_covid_tcm = CD4_covid_tcm[CD4_covid_tcm.obs.n_genes_by_counts >100, :]
+CD4_covid_tcm = CD4_covid_tcm[:,CD4_covid_tcm.var.n_cells_by_counts >500]
+cd4_covid_tcm = pd.DataFrame(data=CD4_covid_tcm.X.toarray(),index=CD4_covid_tcm.obs.index, columns=CD4_covid_tcm.var.gene_ids)
+cd4_covid_tcm.to_csv("cd4_covid_tcm.csv")
+CD4_covid_tcm.write_csvs("CD4_covid_tcm")
+
+
+CD4_covid_tcm = CD4_covid[CD4_covid.obs.Annotation_minor_subset.str.startswith('CD4.TCM'),:]
+sc.pp.calculate_qc_metrics(CD4_covid_tcm, percent_top=None, log1p=False, inplace=True)
+CD4_covid_tcm = CD4_covid_tcm[CD4_covid_tcm.obs.n_genes_by_counts >100, :]
+CD4_covid_tcm = CD4_covid_tcm[:,CD4_covid_tcm.var.n_cells_by_counts >500]
+cd4_covid_tcm = pd.DataFrame(data=CD4_covid_tcm.X.toarray(),index=CD4_covid_tcm.obs.index, columns=CD4_covid_tcm.var.gene_ids)
+cd4_covid_tcm.to_csv("cd4_covid_tcm.csv")
+CD4_covid_tcm.write_csvs("CD4_covid_tcm")
+
+
+CD4_covid_tcm = CD4_covid[CD4_covid.obs.Annotation_minor_subset.str.startswith('CD4.TREG'),:]
+sc.pp.calculate_qc_metrics(CD4_covid_tcm, percent_top=None, log1p=False, inplace=True)
+CD4_covid_tcm = CD4_covid_tcm[CD4_covid_tcm.obs.n_genes_by_counts >100, :]
+CD4_covid_tcm = CD4_covid_tcm[:,CD4_covid_tcm.var.n_cells_by_counts >500]
+cd4_covid_tcm = pd.DataFrame(data=CD4_covid_tcm.X.toarray(),index=CD4_covid_tcm.obs.index, columns=CD4_covid_tcm.var.gene_ids)
+cd4_covid_tcm.to_csv("cd4_covid_treg.csv")
+CD4_covid_tcm.write_csvs("CD4_covid_treg")
+
+
+####### B cells
+
+
+B = adata[adata.obs.Annotation_major_subset == 'B']
+B = B[B.obs.Source.str.startswith('COVID'),:]
+B_naive = B[B.obs.Annotation_minor_subset.str.startswith('B.NAIVE'),:]
+sc.pp.calculate_qc_metrics(B_naive, percent_top=None, log1p=False, inplace=True)
+B_naive = B_naive[B_naive.obs.n_genes_by_counts >100, :]
+B_naive = B_naive[:,B_naive.var.n_cells_by_counts >500]
+b_naive = pd.DataFrame(data=B_naive.X.toarray(),index=B_naive.obs.index, columns=B_naive.var.gene_ids)
+b_naive.to_csv("b_covid_naive.csv")
+B_naive.write_csvs("b_covid_naive")
+
+B_naive = B[B.obs.Annotation_minor_subset.str.startswith('B.MEM'),:]
+sc.pp.calculate_qc_metrics(B_naive, percent_top=None, log1p=False, inplace=True)
+B_naive = B_naive[B_naive.obs.n_genes_by_counts >100, :]
+B_naive = B_naive[:,B_naive.var.n_cells_by_counts >500]
+b_naive = pd.DataFrame(data=B_naive.X.toarray(),index=B_naive.obs.index, columns=B_naive.var.gene_ids)
+b_naive.to_csv("b_covid_mem.csv")
+B_naive.write_csvs("b_covid_mem")
+
+B_naive = B[B.obs.Annotation_minor_subset.str.startswith('B.INT'),:]
+sc.pp.calculate_qc_metrics(B_naive, percent_top=None, log1p=False, inplace=True)
+B_naive = B_naive[B_naive.obs.n_genes_by_counts >100, :]
+B_naive = B_naive[:,B_naive.var.n_cells_by_counts >500]
+b_naive = pd.DataFrame(data=B_naive.X.toarray(),index=B_naive.obs.index, columns=B_naive.var.gene_ids)
+b_naive.to_csv("b_covid_int.csv")
+B_naive.write_csvs("b_covid_int")
