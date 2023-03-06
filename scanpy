@@ -142,3 +142,14 @@ B_naive = B_naive[:,B_naive.var.n_cells_by_counts >500]
 b_naive = pd.DataFrame(data=B_naive.X.toarray(),index=B_naive.obs.index, columns=B_naive.var.gene_ids)
 b_naive.to_csv("b_covid_int.csv")
 B_naive.write_csvs("b_covid_int")
+
+##### MAIT cells
+
+mait = adata[adata.obs.Annotation_major_subset == 'MAIT']
+CD8_covid_naive = mait[mait.obs.Source.str.startswith('COVID'),:]
+sc.pp.calculate_qc_metrics(CD8_covid_naive, percent_top=None, log1p=False, inplace=True)
+CD8_covid_naive = CD8_covid_naive[CD8_covid_naive.obs.n_genes_by_counts >50, :]
+CD8_covid_naive = CD8_covid_naive[:,CD8_covid_naive.var.n_cells_by_counts >100]
+cd8_covid_naive = pd.DataFrame(data=CD8_covid_naive.X.toarray(),index=CD8_covid_naive.obs.index, columns=CD8_covid_naive.var.gene_ids)
+cd8_covid_naive.to_csv("mait_covid.csv")
+CD8_covid_naive.write_csvs("mait_covid_naive")
