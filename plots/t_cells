@@ -6,6 +6,16 @@ load(paste(i,".Rd",sep=""))
 pv->mat[i,]
 print(i)})}
 
+##### alternative
+
+matrix(nrow=nrow(cd8small),ncol=ncol(matnum))->mat
+for(i in 1:nrow(cd8small)){
+try({
+load(paste(i,".covid.temra.standard.Rd",sep=""))
+pv->mat[i,]
+print(i)})}
+
+
 library(GWASTools)
 
 colnames(matnum)->colnames(mat)
@@ -16,7 +26,7 @@ sapply(strsplit(out[,4],"\\."),"[[",1)->ref
 
 colnames(mat)<-colnames(matnum)
 colSums(matnum)->cs
-mat[,which(cs>50)]->mat2
+mat[,which(cs>100)]->mat2
 
 
 bigmat<-matrix(nrow=ncol(mat2)*nrow(mat2),ncol=3)
